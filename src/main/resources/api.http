@@ -1,0 +1,39 @@
+### Variables
+@baseUrl = http://localhost:8080
+
+### 1. Upload d'un fichier (multipart/form-data)
+# Remplace le chemin du fichier par un fichier existant sur ton poste
+POST {{baseUrl}}/files
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="email"
+
+test@example.com
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="photo.jpg"
+Content-Type: image/jpeg
+
+< E:\WhatsApp Image 2026-08-02 at 17.52.06.jpeg
+--WebAppBoundary--
+
+### 2. Upload avec un autre format (PNG)
+POST {{baseUrl}}/files
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="email"
+
+autre.email@example.com
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="image.png"
+Content-Type: image/png
+
+< E:\WhatsApp Image 2026-08-02 at 17.52.06.jpeg
+--WebAppBoundary--
+
+### 3. Récupérer la liste de tous les fichiers uploadés
+GET {{baseUrl}}/files
+Accept: application/json
+
+###
