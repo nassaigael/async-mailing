@@ -17,15 +17,15 @@ import lombok.ToString;
 @ToString
 public class FileUploadConfirmationRequested extends PojaEvent {
 
-	private UUID fileId;
+  private UUID fileId;
 
-	@Override
-	public Duration maxConsumerDuration() {
-		return Duration.ofSeconds(60);
-	}
+  @Override
+  public Duration maxConsumerDuration() {
+    return Duration.ofSeconds(60);
+  }
 
-	@Override
-	public Duration maxConsumerBackoffBetweenRetries() {
-		return Duration.ofSeconds(30);
-	}
+  @Override
+  public Duration maxConsumerBackoffBetweenRetries() {
+    return Duration.ofSeconds(30);
+  }
 }

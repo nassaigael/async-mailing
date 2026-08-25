@@ -18,58 +18,57 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 public class UploadedFileService {
 
-	private final UploadedFileRepository uploadedFileRepository;
-	private final BucketComponent bucketComponent;
-	private final EventProducer<FileUploadConfirmationRequested> eventProducer;
+  private final UploadedFileRepository uploadedFileRepository;
+  private final BucketComponent bucketComponent;
+  private final EventProducer<FileUploadConfirmationRequested> eventProducer;
 
+  @SneakyThrows
+  public UploadedFileEntity upload(String email, MultipartFile file) {
+    var id = UUID.randomUUID();
+    var nomFichier = file.getOriginalFilename();
+    var extension = extractExtension(nomFichier);
 
-	@SneakyThrows
-	public UploadedFileEntity upload(String email, MultipartFile file) {
-		var id = UUID.randomUUID();
-		var nomFichier = file.getOriginalFilename();
-		var extension = extractExtension(nomFichier);
+    var entity =
+        UploadedFileEntity.builder()
+            .id(id)
+            .nomFichier(nomFichier)
+            .email(email)
+            .createdAt(Instant.now())
+            .build();
+    uploadedFileRepository.save(entity);
 
-		var entity =
-				UploadedFileEntity.builder()
-						.id(id)
-						.nomFichier(nomFichier)
-						.email(email)
-						.createdAt(Instant.now())
-						.build();
-		uploadedFileRepository.save(entity);
+    var tempFile = File.createTempFile("upload-" + id, extension);
+    file.transferTo(tempFile);
+    bucketComponent.upload(tempFile, originalKey(id, extension));
 
-		var tempFile = File.createTempFile("upload-" + id, extension);
-		file.transferTo(tempFile);
-		bucketComponent.upload(tempFile, originalKey(id, extension));
+    var event = FileUploadConfirmationRequested.builder().fileId(id).build();
+    eventProducer.accept(List.of(event));
 
-		var event = FileUploadConfirmationRequested.builder().fileId(id).build();
-		eventProducer.accept(List.of(event));
+    return entity;
+  }
 
-		return entity;
-	}
+  public List<UploadedFileEntity> findAll() {
+    return uploadedFileRepository.findAll();
+  }
 
-	public List<UploadedFileEntity> findAll() {
-		return uploadedFileRepository.findAll();
-	}
+  public UploadedFileEntity getById(UUID id) {
+    return uploadedFileRepository
+        .findById(id)
+        .orElseThrow(() -> new IllegalStateException("Fichier introuvable pour l'id " + id));
+  }
 
-	public UploadedFileEntity getById(UUID id) {
-		return uploadedFileRepository
-				.findById(id)
-				.orElseThrow(() -> new IllegalStateException("Fichier introuvable pour l'id " + id));
-	}
+  public static String originalKey(UUID id, String extension) {
+    return "uploads/" + id + "/original" + extension;
+  }
 
-	public static String originalKey(UUID id, String extension) {
-		return "uploads/" + id + "/original" + extension;
-	}
+  public static String blackAndWhiteKey(UUID id, String extension) {
+    return "uploads/" + id + "/bw" + extension;
+  }
 
-	public static String blackAndWhiteKey(UUID id, String extension) {
-		return "uploads/" + id + "/bw" + extension;
-	}
-
-	private String extractExtension(String filename) {
-		if (filename == null || !filename.contains(".")) {
-			return "";
-		}
-		return filename.substring(filename.lastIndexOf('.'));
-	}
+  private String extractExtension(String filename) {
+    if (filename == null || !filename.contains(".")) {
+      return "";
+    }
+    return filename.substring(filename.lastIndexOf('.'));
+  }
 }

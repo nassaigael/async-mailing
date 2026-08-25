@@ -11,17 +11,17 @@ import lombok.Data;
 @Builder
 @AllArgsConstructor
 public class UploadedFileResponse {
-	private UUID id;
-	private String nomFichier;
-	private String email;
-	private Instant createdAt;
+  private UUID id;
+  private String nomFichier;
+  private String email;
+  private Instant createdAt;
 
-	public static UploadedFileResponse from(UploadedFileEntity entity) {
-		return UploadedFileResponse.builder()
-				.id(entity.getId())
-				.nomFichier(entity.getNomFichier())
-				.email(entity.getEmail())
-				.createdAt(entity.getCreatedAt())
-				.build();
-	}
+  public static UploadedFileResponse from(UploadedFileEntity entity) {
+    return UploadedFileResponse.builder()
+        .id(entity.getId())
+        .nomFichier(entity.getNomFichier())
+        .email(entity.getEmail())
+        .createdAt(entity.getCreatedAt())
+        .build();
+  }
 }

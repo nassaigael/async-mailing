@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 public class UploadedFileQueryController {
 
-	private final UploadedFileService uploadedFileService;
+  private final UploadedFileService uploadedFileService;
 
-	@GetMapping("/files")
-	public List<UploadedFileResponse> getAllFiles() {
-		return uploadedFileService.findAll().stream().map(UploadedFileResponse::from).toList();
-	}
+  @GetMapping("/files")
+  public List<UploadedFileResponse> getAllFiles() {
+    return uploadedFileService.findAll().stream().map(UploadedFileResponse::from).toList();
+  }
 }

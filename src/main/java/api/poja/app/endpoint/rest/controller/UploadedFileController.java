@@ -14,13 +14,12 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 public class UploadedFileController {
 
-	private final UploadedFileService uploadedFileService;
+  private final UploadedFileService uploadedFileService;
 
-	@PostMapping(value = "/files", consumes = "multipart/form-data")
-	public ResponseEntity<UploadedFileResponse> uploadFile(
-			@RequestParam("email") String email, @RequestParam("file") MultipartFile file) {
-		var uploadedFile = uploadedFileService.upload(email, file);
-		return ResponseEntity.status(HttpStatus.CREATED)
-				.body(UploadedFileResponse.from(uploadedFile));
-	}
+  @PostMapping(value = "/files", consumes = "multipart/form-data")
+  public ResponseEntity<UploadedFileResponse> uploadFile(
+      @RequestParam("email") String email, @RequestParam("file") MultipartFile file) {
+    var uploadedFile = uploadedFileService.upload(email, file);
+    return ResponseEntity.status(HttpStatus.CREATED).body(UploadedFileResponse.from(uploadedFile));
+  }
 }

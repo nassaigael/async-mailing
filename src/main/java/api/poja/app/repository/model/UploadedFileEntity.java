@@ -19,14 +19,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UploadedFileEntity {
 
-	@Id private UUID id;
+  @Id private UUID id;
 
-	@Column(name = "nom_fichier", nullable = false)
-	private String nomFichier;
+  @Column(name = "nom_fichier", nullable = false)
+  private String nomFichier;
 
-	@Column(nullable = false)
-	private String email;
+  @Column(nullable = false)
+  private String email;
 
-	@Column(name = "created_at", nullable = false)
-	private Instant createdAt;
+  @Column(name = "created_at", nullable = false)
+  private Instant createdAt;
 }
