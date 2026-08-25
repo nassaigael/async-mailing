@@ -154,6 +154,7 @@ dependencies {
     testImplementation 'org.junit-pioneer:junit-pioneer:2.2.0'
 
 testImplementation "org.mockito:mockito-core:5.+"
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
 implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
 }
