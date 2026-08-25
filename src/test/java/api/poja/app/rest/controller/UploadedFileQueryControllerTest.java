@@ -1,6 +1,6 @@
 package api.poja.app.rest.controller;
 
-import api.poja.app.dto.UploadedFileResponse;
+import api.poja.app.endpoint.rest.controller.UploadedFileQueryController;
 import api.poja.app.repository.model.UploadedFileEntity;
 import api.poja.app.service.UploadedFileService;
 import org.junit.jupiter.api.Test;
